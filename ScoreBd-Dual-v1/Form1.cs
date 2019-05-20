@@ -25,7 +25,7 @@ using CyUSB;
 namespace Scoreboardv6 {
 	public partial class ScoreForm : Form {
 		const int usbBUF_SIZE = 64;             // Go into control panel and tweak advanced settings. Make buffer size 64 and polling around 2mSec
-		const String SW_VER = "1.2.5 (032019)";
+		const String SW_VER = "1.2.6 (052019)";
 
 		// USB (FW) Out (to Ctrl) Buffer positions  (not really bits as array element locations)
 		const int CMD_BIT     = 0x01;
@@ -90,7 +90,7 @@ namespace Scoreboardv6 {
 		public bool configSoundOnEndOfPreGame, configSoundOnConcede, configSoundOnEndOfGame, configEndOfGameSiren, configPwrUp;
 		public bool configPwrOff, HWAttached = false;		// If hardware is attached we don't require a license.
 		public bool SWLicense = false, warningStatus = false, homeVicButtonisStop, visVicButtonisStop, sw_clk_override;
-		public bool validLicense = false, dualMatch = true, swapGameOver = false;
+		public bool validLicense = false, dualMatch = true, swapGameOver = false, showSWmsg = false;
 		public bool PSon = false, hornOn = false, audioMute = false, countDown = false;
 		public bool homeTimeoutTaken = false, visitorTimeoutTaken = false, processRx = false, pwrUpOnStart, pwrOffEnd;
         public bool swapHomeTimeoutTaken, swapVisitTimeoutTaken, swapHomeTimeoutButtonEnabled, swapVisitTimeoutButtonEnabled;
@@ -166,13 +166,16 @@ namespace Scoreboardv6 {
                 // I do not authorize this. To know it is me, I will remove, or rename, the license.txt file.. Then we will run.
 
                 // The following could be removed.. I found the missing thumbdrive (4/32/18)
+                //MessageBox.Show("found ebplic");
                 if (File.Exists(@"C:\BostonPaintball\license.txt")) { // This is a bogus file. If it exists (by default with installer) then someone else is using this
                     SWLicense = false;          // so, no license for you!
                     licenseBox.Text = "HACK";
+                    //MessageBox.Show("license.txt .. HACK");
                     System.Threading.Thread.Sleep(500);
                 } else {
                     if (File.Exists(@"C:\BostonPaintball\.ebplic-clk")) {  // I need away to override the faster clock speed for software only license.
                         SWLicense = true;
+                        //MessageBox.Show("found ebplic-clk");
                         sw_clk_override = true; // Keep the clock at 950mSec
                     }
                 }
@@ -274,6 +277,10 @@ namespace Scoreboardv6 {
                 visitorTimeoutButton.Enabled = true;
                 homeTimeoutTaken = false;
                 homeTimeoutButton.Enabled = true;
+                // We must restore the background color as we likely went to 0:00 which is RED (5/20/19)
+                preGameTimeBox.BackColor = Color.LightYellow;
+                gameTimeBox.BackColor = Color.LightYellow;
+
                 updateDisplay();
                 updateAppTimes();
             }
@@ -551,11 +558,15 @@ namespace Scoreboardv6 {
                             if (preGameRunning == true) {		     // If pregame is running this is a timeout.
                                 if (gameClockRunning == true) {
                                     if (homeTimeoutTaken == false) {
-                                        homeTimeoutMgr();   // add 5/21/18
-                                        updateDisplay();    // add 5/21/18
-                                        updateAppTimes();   // add 5/21/18
-                                        startStopFunction(); // add 5/21/18
-                                        MessageBox.Show(homeTeam + " pressed timeout");
+                                        if (gameMinutes == 0 && gameSeconds > 10) {
+                                            MessageBox.Show(homeTeam + " pressed timeout .. ignored since we're below 10 seconds!"); // Added 5/20/19
+                                        } else {
+                                            homeTimeoutMgr();   // add 5/21/18
+                                            updateDisplay();    // add 5/21/18
+                                            updateAppTimes();   // add 5/21/18
+                                            startStopFunction(); // add 5/21/18
+                                            MessageBox.Show(homeTeam + " took a timeout .. click \"OK\" to start the clock");
+                                        }
                                     } else {
                                         MessageBox.Show(homeTeam + " pressed timeout, but they already took their timeout!");
                                     }
@@ -581,11 +592,15 @@ namespace Scoreboardv6 {
                             if (preGameRunning == true) {		// If pregame is running this is a timeout.
                                 if (gameClockRunning == true) {
                                     if (visitorTimeoutTaken == false) {
-                                        visitorTimeoutMgr();   // add 5/21/18
-                                        updateDisplay();    // add 5/21/18
-                                        updateAppTimes();   // add 5/21/18
-                                        startStopFunction(); // add 5/21/18
-                                        MessageBox.Show(visitorTeam + " pressed timeout");
+                                        if (gameMinutes == 0 && gameSeconds > 10) {
+                                            MessageBox.Show(visitorTeam + " pressed timeout .. ignored since we're below 10 seconds!"); // Added 5/20/19
+                                        } else {
+                                            visitorTimeoutMgr();   // add 5/21/18
+                                            updateDisplay();    // add 5/21/18
+                                            updateAppTimes();   // add 5/21/18
+                                            startStopFunction(); // add 5/21/18
+                                            MessageBox.Show(visitorTeam + " took a timeout .. click \"OK\" to start the clock");
+                                        }
                                     } else {
                                         MessageBox.Show(visitorTeam + " pressed timeout, but they already took their timeout!");
                                     }
@@ -1102,7 +1117,10 @@ namespace Scoreboardv6 {
                     MessageBox.Show("Software license only. Clock set to 650");
                 } else {
                     configNormTimer = 950;  // Using SW license has its disadvantages :)
-                    MessageBox.Show("Software license with clock override!");
+                    if (showSWmsg == false) {  // Only show this once (not each time we do a reset)  5/20/19
+                        MessageBox.Show("Software license with clock override!");
+                    }
+                    showSWmsg = true;
                 }
             }
 			gameClockTimer.Interval = configNormTimer;
@@ -1268,10 +1286,29 @@ namespace Scoreboardv6 {
 		}
 
 		private void ScoreForm_KeyDown(object sender, KeyEventArgs e) {
+            MessageBox.Show("KeyDown even");
+            if (e.KeyData == Keys.Oemplus)
+            {
+                MessageBox.Show("PLUS");
+            }
             if (e.KeyCode == Keys.Space) {
                 startStopFunction();
             }
-
+            if (e.KeyCode == Keys.OemQuotes)
+            {
+                startStopFunction();
+            }
+            if (e.KeyCode == Keys.Oemplus) {
+                configNormTimer += 25;
+                //MessageBox.Show("Add 25 mSec to timer (now: " + configNormTimer + ")");
+                updateDisplay();
+            }
+            if (e.KeyData == Keys.OemMinus)
+            {
+                configNormTimer -= 25;
+                updateDisplay();
+                //MessageBox.Show("Subtract 25 mSec to timer (now: " + configNormTimer + ")");
+            }
         }
 
         private void set10Button_Click(object sender, EventArgs e) {

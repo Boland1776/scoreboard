@@ -150,21 +150,21 @@
             // editTimesToolStripMenuItem
             // 
             this.editTimesToolStripMenuItem.Name = "editTimesToolStripMenuItem";
-            this.editTimesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.editTimesToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.editTimesToolStripMenuItem.Text = "Edit Times";
             this.editTimesToolStripMenuItem.Click += new System.EventHandler(this.editTimesToolStripMenuItem_Click);
             // 
             // teamsToolStripMenuItem
             // 
             this.teamsToolStripMenuItem.Name = "teamsToolStripMenuItem";
-            this.teamsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.teamsToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.teamsToolStripMenuItem.Text = "Teams";
             this.teamsToolStripMenuItem.Click += new System.EventHandler(this.teamsToolStripMenuItem_Click);
             // 
             // configurationToolStripMenuItem
             // 
             this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
-            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.configurationToolStripMenuItem.Text = "Configuration";
             this.configurationToolStripMenuItem.Click += new System.EventHandler(this.configurationToolStripMenuItem_Click);
             // 
@@ -531,7 +531,7 @@
             this.homeLocation.Size = new System.Drawing.Size(229, 20);
             this.homeLocation.TabIndex = 4;
             this.homeLocation.TabStop = false;
-            this.homeLocation.Text = "-- RIGHT TENT --";
+            this.homeLocation.Text = "<============";
             this.homeLocation.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // textBox1
@@ -542,7 +542,7 @@
             this.textBox1.Size = new System.Drawing.Size(229, 20);
             this.textBox1.TabIndex = 5;
             this.textBox1.TabStop = false;
-            this.textBox1.Text = "-- LEFT TENT --";
+            this.textBox1.Text = "===========>";
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // outBufferBox
@@ -927,9 +927,10 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "ScoreForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Scoreboard Dual - Rev 1.2.5 (032019)";
+            this.Text = "Scoreboard Dual - Rev 1.2.6 (052019)";
             this.Load += new System.EventHandler(this.ScoreForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ScoreForm_KeyDown);
+//            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keyDownEvent);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
