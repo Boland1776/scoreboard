@@ -25,7 +25,7 @@ using CyUSB;
 namespace Scoreboardv6 {
 	public partial class ScoreForm : Form {
 		const int usbBUF_SIZE = 64;             // Go into control panel and tweak advanced settings. Make buffer size 64 and polling around 2mSec
-		const String SW_VER = "1.2.6 (052019)";
+		const String SW_VER = "1.2.7 (070819)";
 
 		// USB (FW) Out (to Ctrl) Buffer positions  (not really bits as array element locations)
 		const int CMD_BIT     = 0x01;
@@ -260,6 +260,16 @@ namespace Scoreboardv6 {
             preGameMinutes += 1;
             startButton.Select();
             updateAppTimes();
+        }
+
+        private void ignoreHomeBox_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ignoreVisBox_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
 
         private void OTButton_Click(object sender, EventArgs e)
@@ -547,6 +557,9 @@ namespace Scoreboardv6 {
 					switch (usbInBuf[RX_IN]) {
 						case HOME_HANG:
                             homeHangButton.BackColor = Color.Red; // So we can test the buttons
+                            if (ignoreHomeBox.Checked == true)  { // WE have seen spuroious hang signal even when box is OFF. Ignore processing if box is checked
+                                break;
+                            }
                             if (preGameRunning == false && gameClockRunning == true) {
                                 homeScoreMgr(true, true, true);
 								homeStatsAddHang();
@@ -581,6 +594,9 @@ namespace Scoreboardv6 {
 							break;
 						case VIS_HANG:
                             visitorHangButton.BackColor = Color.Red; // So we can test the buttons w/o game running
+                            if (ignoreVisBox.Checked == true)  { // We have seen spuroious hang signal even when box is OFF. Ignore processing if box is checked
+                                break;
+                            }
                             if (preGameRunning == false && gameClockRunning == true) {
 								visitorScoreMgr(true, true, true);
 								visitorStatsAddHang();

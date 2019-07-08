@@ -96,6 +96,8 @@
             this.addOneMinButton = new System.Windows.Forms.Button();
             this.decOneMinButtun = new System.Windows.Forms.Button();
             this.OTButton = new System.Windows.Forms.Button();
+            this.ignoreHomeBox = new System.Windows.Forms.CheckBox();
+            this.ignoreVisBox = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -867,11 +869,37 @@
             this.OTButton.UseVisualStyleBackColor = true;
             this.OTButton.Click += new System.EventHandler(this.OTButton_Click);
             // 
+            // ignoreHomeBox
+            // 
+            this.ignoreHomeBox.AutoSize = true;
+            this.ignoreHomeBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ignoreHomeBox.Location = new System.Drawing.Point(198, 400);
+            this.ignoreHomeBox.Name = "ignoreHomeBox";
+            this.ignoreHomeBox.Size = new System.Drawing.Size(49, 16);
+            this.ignoreHomeBox.TabIndex = 57;
+            this.ignoreHomeBox.Text = "ignore";
+            this.ignoreHomeBox.UseVisualStyleBackColor = true;
+            this.ignoreHomeBox.CheckedChanged += new System.EventHandler(this.ignoreHomeBox_CheckedChanged);
+            // 
+            // ignoreVisBox
+            // 
+            this.ignoreVisBox.AutoSize = true;
+            this.ignoreVisBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ignoreVisBox.Location = new System.Drawing.Point(650, 400);
+            this.ignoreVisBox.Name = "ignoreVisBox";
+            this.ignoreVisBox.Size = new System.Drawing.Size(49, 16);
+            this.ignoreVisBox.TabIndex = 58;
+            this.ignoreVisBox.Text = "ignore";
+            this.ignoreVisBox.UseVisualStyleBackColor = true;
+            this.ignoreVisBox.CheckedChanged += new System.EventHandler(this.ignoreVisBox_CheckedChanged);
+            // 
             // ScoreForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(892, 618);
+            this.Controls.Add(this.ignoreVisBox);
+            this.Controls.Add(this.ignoreHomeBox);
             this.Controls.Add(this.OTButton);
             this.Controls.Add(this.decOneMinButtun);
             this.Controls.Add(this.addOneMinButton);
@@ -930,7 +958,6 @@
             this.Text = "Scoreboard Dual - Rev 1.2.6 (052019)";
             this.Load += new System.EventHandler(this.ScoreForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ScoreForm_KeyDown);
-//            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keyDownEvent);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -1011,6 +1038,8 @@
         private System.Windows.Forms.Button decOneMinButtun;
         private System.Windows.Forms.ToolStripMenuItem countdownBeepToolStripMenuItem;
         private System.Windows.Forms.Button OTButton;
+        private System.Windows.Forms.CheckBox ignoreHomeBox;
+        private System.Windows.Forms.CheckBox ignoreVisBox;
     }
 }
 
